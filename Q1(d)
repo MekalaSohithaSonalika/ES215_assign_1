@@ -1,0 +1,34 @@
+#include <stdio.h>
+#include <time.h>
+
+void calculateFibonacciIterativelyWithMemoization(int count) {
+    unsigned long long memo[count];
+    memo[0] = 0;
+    memo[1] = 1;
+
+    printf("First %d Fibonacci numbers (iterative with memoization):\n", count);
+    printf("0: %llu\n", memo[0]);
+    printf("1: %llu\n", memo[1]);
+
+    int index = 2;
+    while (index < count) {
+        memo[index] = memo[index - 1] + memo[index - 2];
+        printf("%d: %llu\n", index, memo[index]);
+        index++;
+    }
+}
+
+int main() {
+    clock_t startTime, endTime;
+    double elapsedTime;
+
+    startTime = clock();
+
+    calculateFibonacciIterativelyWithMemoization(50);
+
+    endTime = clock();
+    elapsedTime = ((double)(endTime - startTime)) / CLOCKS_PER_SEC;
+    printf("Time taken: %f seconds\n", elapsedTime);
+
+    return 0;
+}
