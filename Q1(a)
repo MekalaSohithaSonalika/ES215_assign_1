@@ -1,0 +1,27 @@
+#include <stdio.h>
+#include <time.h>
+
+unsigned long long calculateFibonacci(int position) {
+    if (position <= 1) {
+        return position;
+    }
+    return calculateFibonacci(position - 1) + calculateFibonacci(position - 2);
+}
+
+int main() {
+    clock_t startTime, endTime;
+    double elapsedTime;
+
+    startTime = clock();
+
+    printf("First 50 Fibonacci numbers (recursive):\n");
+    for (int index = 0; index < 50; index++) {
+        printf("%d: %llu\n", index, calculateFibonacci(index));
+    }
+
+    endTime = clock();
+    elapsedTime = ((double)(endTime - startTime)) / CLOCKS_PER_SEC;
+    printf("Time taken: %f seconds\n", elapsedTime);
+
+    return 0;
+}
