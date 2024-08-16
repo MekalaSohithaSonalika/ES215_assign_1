@@ -1,0 +1,31 @@
+#include <stdio.h>
+#include <time.h>
+
+void calculateFibonacciIteratively(int count) {
+    unsigned long long firstNumber = 0, secondNumber = 1, nextNumber;
+    printf("First %d Fibonacci numbers (iterative):\n", count);
+
+    int index = 0;
+    while (index < count) {
+        printf("%d: %llu\n", index, firstNumber);
+        nextNumber = firstNumber + secondNumber;
+        firstNumber = secondNumber;
+        secondNumber = nextNumber;
+        index++;
+    }
+}
+
+int main() {
+    clock_t startTime, endTime;
+    double elapsedTime;
+
+    startTime = clock();
+
+    calculateFibonacciIteratively(50);
+
+    endTime = clock();
+    elapsedTime = ((double)(endTime - startTime)) / CLOCKS_PER_SEC;
+    printf("Time taken: %f seconds\n", elapsedTime);
+
+    return 0;
+}
