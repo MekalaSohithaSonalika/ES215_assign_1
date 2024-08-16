@@ -1,0 +1,70 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+void multiplyMatrices(int **matrixA, int **matrixB, int **resultMatrix, int size) {
+    int row, column, factor;
+
+    row = 0;
+    while (row < size) {
+        column = 0;
+        while (column < size) {
+            resultMatrix[row][column] = 0;
+            factor = 0;
+            while (factor < size) {
+                resultMatrix[row][column] += matrixA[row][factor] * matrixB[factor][column];
+                factor++;
+            }
+            column++;
+        }
+        row++;
+    }
+}
+
+int main() {
+    int matrixSize = 1024; // Change this for different sizes: 64, 128, 256, 512, 1024
+    int **matrixA = (int **)malloc(matrixSize * sizeof(int *));
+    int **matrixB = (int **)malloc(matrixSize * sizeof(int *));
+    int **resultMatrix = (int **)malloc(matrixSize * sizeof(int *));
+
+    int row, column;
+    row = 0;
+    while (row < matrixSize) {
+        matrixA[row] = (int *)malloc(matrixSize * sizeof(int));
+        matrixB[row] = (int *)malloc(matrixSize * sizeof(int));
+        resultMatrix[row] = (int *)malloc(matrixSize * sizeof(int));
+        column = 0;
+        while (column < matrixSize) {
+            matrixA[row][column] = rand() % 100;
+            matrixB[row][column] = rand() % 100;
+            column++;
+        }
+        row++;
+    }
+
+    clock_t startTime, endTime;
+    double elapsedTime;
+
+    startTime = clock();
+
+    multiplyMatrices(matrixA, matrixB, resultMatrix, matrixSize);
+
+    endTime = clock();
+    elapsedTime = ((double)(endTime - startTime)) / CLOCKS_PER_SEC;
+
+    printf("Time taken for multiplication of %dx%d matrix: %f seconds\n", matrixSize, matrixSize, elapsedTime);
+
+    // Free memory
+    row = 0;
+    while (row < matrixSize) {
+        free(matrixA[row]);
+        free(matrixB[row]);
+        free(resultMatrix[row]);
+        row++;
+    }
+    free(matrixA);
+    free(matrixB);
+    free(resultMatrix);
+
+    return 0;
+}
