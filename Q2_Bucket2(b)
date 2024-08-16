@@ -1,0 +1,33 @@
+import time
+
+def multiply_matrices_loop(A, B):
+  """
+  Multiplies matrices A and B using nested loops.
+
+  Args:
+    A: A NumPy array representing the first matrix (float64 for higher precision).
+    B: A NumPy array representing the second matrix (float64 for higher precision).
+
+  Returns:
+    A NumPy array representing the result of the multiplication (C).
+  """
+  N = len(A)
+  C = np.zeros((N, N), dtype=np.float64)
+  for i in range(N):
+    for j in range(N):
+      for k in range(N):
+        C[i, j] += A[i, k] * B[k, j]
+  return C
+
+N = 1024  # Change this for different sizes: 64, 128, 256, 512, 1024
+A = np.random.rand(N, N).astype(np.float64)  # Use float64 for higher precision
+B = np.random.rand(N, N).astype(np.float64)  # Use float64 for higher precision
+
+start_time = time.time()
+
+# Multiply matrices using loop (for educational purposes, not recommended)
+C = multiply_matrices_loop(A, B)
+
+end_time = time.time()
+
+print(f"Time taken for multiplication of {N}x{N} matrix (using loop): {end_time - start_time} seconds")
