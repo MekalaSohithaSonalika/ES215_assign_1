@@ -1,1 +1,98 @@
+#include <stdio.h>
+#include <time.h>
+#include <stdint.h>
+#include <vector>
+
+using namespace std;
+
+long long fibonacci_recursive(int term) {
+    if (term == 0) return 0;
+    if (term == 1) return 1;
+    return fibonacci_recursive(term - 1) + fibonacci_recursive(term - 2);
+}
+
+vector<long long> compute_fib_sequence_recursive(int terms_count) {
+    vector<long long> sequence;
+    for (int i = 1; i < terms_count; i++) {
+        sequence.push_back(fibonacci_recursive(i));
+    }
+    return sequence;
+}
+
+long long fibonacci_iterative(int term) {
+    if (term == 0) return 0;
+    if (term == 1) return 1;
+
+    long long prev = 1;
+    long long prev_prev = 0;
+    long long curr;
+
+    for (int i = 2; i <= term; i++) {
+        curr = prev + prev_prev;
+        prev_prev = prev;
+        prev = curr;
+    }
+
+    return curr;
+}
+
+vector<long long> compute_fib_sequence_iterative(int terms_count) {
+    vector<long long> sequence;
+    for (int i = 1; i < terms_count; i++) {
+        sequence.push_back(fibonacci_iterative(i));
+    }
+    return sequence;
+}
+
+long long fibonacci_recursive_memoized(int term, vector<long long>& memo) {
+    if (term == 0) return 0;
+    if (term == 1) return 1;
+    if (memo[term] != -1) return memo[term];
+
+    memo[term] = fibonacci_recursive_memoized(term - 1, memo) + fibonacci_recursive_memoized(term - 2, memo);
+    return memo[term];
+}
+
+long long fibonacci_iterative_memoized(int term, vector<long long>& memo) {
+    if (term == 0) return 0;
+    if (term == 1) return 1;
+
+    memo[0] = 0;
+    memo[1] = 1;
+
+    for (int i = 2; i <= term; i++) {
+        memo[i] = memo[i - 1] + memo[i - 2];
+    }
+
+    return memo[term];
+}
+
+void measure_execution_time(void (*func)(int), int term, const char* func_name) {
+    struct timespec start_time, end_time;
+
+    clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start_time);
+    func(term);
+    clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &end_time);
+
+    long sec_diff = end_time.tv_sec - start_time.tv_sec;
+    long nano_diff = end_time.tv_nsec - start_time.tv_nsec;
+    if (nano_diff < 0) {
+        sec_diff--;
+        nano_diff += 1000000000L;
+    }
+
+    printf("%s executed in %ld.%09ld seconds\n", func_name, sec_diff, nano_diff);
+}
+
+int main() {
+    int terms_count = 50;
+    vector<long long> memo_cache(terms_count + 1, -1);
+
+    measure_execution_time([](int term) { fibonacci_recursive(term); }, terms_count, "fibonacci_recursive");
+    measure_execution_time([](int term) { vector<long long> memo(term + 1, -1); fibonacci_recursive_memoized(term, memo); }, terms_count, "fibonacci_recursive_memoized");
+    measure_execution_time([](int term) { fibonacci_iterative(term); }, terms_count, "fibonacci_iterative");
+    measure_execution_time([](int term) { vector<long long> memo(term + 1, -1); fibonacci_iterative_memoized(term, memo); }, terms_count, "fibonacci_iterative_memoized");
+
+    return 0;
+}
 
