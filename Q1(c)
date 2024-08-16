@@ -1,0 +1,40 @@
+#include <stdio.h>
+#include <time.h>
+#include <string.h>
+
+#define MAX_VALUE 50
+
+unsigned long long memo[MAX_VALUE];
+
+unsigned long long calculateFibonacciWithMemoization(int position) {
+    if (position <= 1) {
+        return position;
+    }
+    if (memo[position] != 0) {
+        return memo[position];
+    }
+    memo[position] = calculateFibonacciWithMemoization(position - 1) + calculateFibonacciWithMemoization(position - 2);
+    return memo[position];
+}
+
+int main() {
+    clock_t startTime, endTime;
+    double elapsedTime;
+
+    memset(memo, 0, sizeof(memo));
+
+    startTime = clock();
+
+    printf("First %d Fibonacci numbers (recursive with memoization):\n", MAX_VALUE);
+    int index = 0;
+    while (index < MAX_VALUE) {
+        printf("%d: %llu\n", index, calculateFibonacciWithMemoization(index));
+        index++;
+    }
+
+    endTime = clock();
+    elapsedTime = ((double)(endTime - startTime)) / CLOCKS_PER_SEC;
+    printf("Time taken: %f seconds\n", elapsedTime);
+
+    return 0;
+}
