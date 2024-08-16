@@ -1,1 +1,31 @@
+import random
+import time
+
+def create_square_matrix(size, data_type):
+    return [[data_type(random.random()) for _ in range(size)] for _ in range(size)]
+
+def multiply_matrices(matrix_a, matrix_b):
+    n = len(matrix_a)
+    product_matrix = [[0] * n for _ in range(n)]
+    for i in range(n):
+        for j in range(n):
+            for k in range(n):
+                product_matrix[i][j] += matrix_a[i][k] * matrix_b[k][j]
+    return product_matrix
+
+def perform_matrix_multiplication(size, data_type):
+    matrix_a = create_square_matrix(size, data_type)
+    matrix_b = create_square_matrix(size, data_type)
+
+    start = time.time()
+    product_matrix = multiply_matrices(matrix_a, matrix_b)
+    end = time.time()
+
+    print(f"Time taken for {size}x{size} matrix with type {data_type.__name__}: {end - start:.6f} seconds")
+
+matrix_sizes = [64, 128, 256, 512, 1024]
+
+for size in matrix_sizes:
+    perform_matrix_multiplication(size, int)
+    perform_matrix_multiplication(size, float)
 
